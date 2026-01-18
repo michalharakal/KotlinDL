@@ -9,41 +9,49 @@ KotlinDL offers simple APIs for training deep learning models from scratch and l
 
 This project aims to make Deep Learning easier for JVM and Android developers and simplify deploying deep learning models in production environments.
 
-Here's an example of training a simple neural network using the SKaiNET DSL:
+Here's an example of training a simple neural network:
 
 ```kotlin
-import sk.ainet.lang.graph.dsl.skainet
-import sk.ainet.lang.nn.loss.MSELoss
-import sk.ainet.lang.nn.metrics.accuracy
-import sk.ainet.lang.nn.optim.sgd
+// KotlinDL wrapper imports
+import org.jetbrains.kotlinx.dl.api.core.dsl.deepLearning
+import org.jetbrains.kotlinx.dl.api.core.loss.MeanSquaredError
+import org.jetbrains.kotlinx.dl.api.core.metric.accuracy
+import org.jetbrains.kotlinx.dl.api.core.tensor.FloatType
+// SKaiNET tensor DSL and operations
 import sk.ainet.lang.tensor.dsl.tensor
+import sk.ainet.lang.tensor.matmul
+import sk.ainet.lang.nn.optim.sgd
+import sk.ainet.lang.nn.topology.ModuleParameter
 
 fun main() {
-    skainet {
-        // Create training data
-        val inputs = tensor(floatArrayOf(0f, 0f, 0f, 1f, 1f, 0f, 1f, 1f), shape = intArrayOf(4, 2))
-        val targets = tensor(floatArrayOf(0f, 1f, 1f, 0f), shape = intArrayOf(4, 1))
+    deepLearning {
+        // Create training data using tensor DSL
+        val x = tensor<FloatType, Float> {
+            shape(4, 2) { from(0f, 0f, 0f, 1f, 1f, 0f, 1f, 1f) }
+        }
+        val y = tensor<FloatType, Float> {
+            shape(4, 1) { from(0f, 1f, 1f, 0f) }
+        }
 
-        // Define model parameters
-        val weights = tensor(floatArrayOf(0.1f, 0.2f), shape = intArrayOf(2, 1))
-            .withRequiresGrad()
-        val bias = tensor(floatArrayOf(0.0f), shape = intArrayOf(1))
-            .withRequiresGrad()
+        // Define model parameters with gradient tracking
+        val w = tensor<FloatType, Float> {
+            shape(2, 1) { from(0.1f, 0.2f) }
+        }.withRequiresGrad()
+        val wParam = ModuleParameter.WeightParameter("w", w)
 
-        val optimizer = sgd(learningRate = 0.1f, parameters = listOf(weights, bias))
-        val lossFunction = MSELoss()
+        val optimizer = sgd(lr = 0.1f)
+        val lossFunction = MeanSquaredError()
 
         // Training loop
         repeat(100) { epoch ->
-            trainStep {
-                val predictions = inputs.matmul(weights) + bias
-                val loss = lossFunction(predictions, targets)
-
-                if (epoch % 10 == 0) {
-                    println("Epoch $epoch, Loss: ${loss.item()}")
-                }
+            trainStep(optimizer, wParam) {
+                val predictions = x.matmul(wParam.value)
+                lossFunction.forward(predictions, y, ctx)
             }
-            optimizer.step()
+
+            if (epoch % 10 == 0) {
+                println("Epoch $epoch")
+            }
         }
     }
 }

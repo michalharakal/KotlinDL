@@ -1,69 +1,58 @@
 package org.jetbrains.kotlinx.dl.impl.skainet
 
 import org.junit.jupiter.api.Test
-import sk.ainet.context.Phase
-import sk.ainet.exec.tensor.ops.DefaultCpuOps
-import sk.ainet.lang.graph.DefaultGradientTape
-import sk.ainet.lang.graph.DefaultGraphExecutionContext
+// KotlinDL wrapper imports
+import org.jetbrains.kotlinx.dl.api.core.dsl.createTrainingContext
+import org.jetbrains.kotlinx.dl.api.core.dsl.DeepLearningScope
+import org.jetbrains.kotlinx.dl.api.core.dsl.GraphContext
+import org.jetbrains.kotlinx.dl.api.core.loss.MeanSquaredError
+import org.jetbrains.kotlinx.dl.api.core.loss.CrossEntropyLoss
+import org.jetbrains.kotlinx.dl.api.core.metric.accuracy
+import org.jetbrains.kotlinx.dl.api.core.tensor.FloatType
+import org.jetbrains.kotlinx.dl.api.core.tensor.IntType
+// SKaiNET imports for tensor DSL and operations
 import sk.ainet.lang.graph.dsl.skainet
-import sk.ainet.lang.nn.loss.CrossEntropyLoss
-import sk.ainet.lang.nn.loss.MSELoss
-import sk.ainet.lang.nn.metrics.accuracy
 import sk.ainet.lang.nn.optim.sgd
 import sk.ainet.lang.nn.topology.ModuleParameter
-import sk.ainet.lang.tensor.data.DenseTensorDataFactory
 import sk.ainet.lang.tensor.dsl.tensor
 import sk.ainet.lang.tensor.matmul
 import sk.ainet.lang.tensor.mean
 import sk.ainet.lang.tensor.relu
-import sk.ainet.lang.types.FP32
-import sk.ainet.lang.types.Int32
 import kotlin.math.abs
 import kotlin.test.assertTrue
 
 /**
- * Simple test demonstrating SKaiNET DSL integration with KotlinDL.
- * Shows complete training flow including metrics.
+ * Test demonstrating SKaiNET DSL integration with KotlinDL wrappers.
+ * Shows complete training flow including metrics using KotlinDL-style imports.
  */
 class SkainetDslTrainingTest {
-
-    private fun createTrainCtx(): DefaultGraphExecutionContext {
-        val dataFactory = DenseTensorDataFactory()
-        val cpuOps = DefaultCpuOps(dataFactory)
-        return DefaultGraphExecutionContext(
-            baseOps = cpuOps,
-            phase = Phase.TRAIN,
-            tensorDataFactory = dataFactory,
-            createTapeFactory = { _ -> DefaultGradientTape(true) }
-        )
-    }
 
     @Test
     fun `simple linear regression training with DSL`() {
         var initialW = 0f
         var finalW = 0f
 
-        skainet(createTrainCtx()) {
-            // Create data using tensor DSL
-            val x = tensor<FP32, Float> {
+        skainet(createTrainingContext()) {
+            // Create data using tensor DSL with KotlinDL type alias
+            val x = tensor<FloatType, Float> {
                 shape(4, 1) {
                     from(1f, 2f, 3f, 4f)
                 }
             }
-            val y = tensor<FP32, Float> {
+            val y = tensor<FloatType, Float> {
                 shape(4, 1) {
                     from(2f, 4f, 6f, 8f)  // y = 2x
                 }
             }
 
             // Model parameter: single weight
-            val w = tensor<FP32, Float> {
+            val w = tensor<FloatType, Float> {
                 shape(1, 1) { from(0.5f) }
             }.withRequiresGrad()
             val wParam = ModuleParameter.WeightParameter("w", w)
 
             val optimizer = sgd(lr = 0.01)
-            val mseLoss = MSELoss()
+            val mseLoss = MeanSquaredError()  // Using KotlinDL alias
             initialW = w.data[0, 0]
 
             // Training loop
@@ -88,9 +77,9 @@ class SkainetDslTrainingTest {
         var initialAcc = 0.0
         var finalAcc = 0.0
 
-        skainet(createTrainCtx()) {
-            // XOR problem data
-            val x = tensor<FP32, Float> {
+        skainet(createTrainingContext()) {
+            // XOR problem data with KotlinDL type aliases
+            val x = tensor<FloatType, Float> {
                 shape(4, 2) {
                     from(
                         0f, 0f,
@@ -100,16 +89,16 @@ class SkainetDslTrainingTest {
                     )
                 }
             }
-            val y = tensor<Int32, Int> {
+            val y = tensor<IntType, Int> {
                 shape(4) { from(0, 1, 1, 0) }
             }
 
             // Two-layer MLP parameters
-            val w1 = tensor<FP32, Float> {
+            val w1 = tensor<FloatType, Float> {
                 shape(2, 8) { randn(std = 0.5f) }
             }.withRequiresGrad()
 
-            val w2 = tensor<FP32, Float> {
+            val w2 = tensor<FloatType, Float> {
                 shape(8, 2) { randn(std = 0.5f) }
             }.withRequiresGrad()
 
@@ -117,8 +106,8 @@ class SkainetDslTrainingTest {
             val w2Param = ModuleParameter.WeightParameter("w2", w2)
 
             val optimizer = sgd(lr = 0.5)
-            val crossEntropyLoss = CrossEntropyLoss()
-            val metric = accuracy()
+            val crossEntropyLoss = CrossEntropyLoss()  // Using KotlinDL alias
+            val metric = accuracy()  // Using KotlinDL wrapper
 
             // Initial forward pass for metric
             val initialPreds = x.matmul(w1Param.value).relu().matmul(w2Param.value)
@@ -156,15 +145,15 @@ class SkainetDslTrainingTest {
 
     @Test
     fun `tensor creation and basic ops with DSL`() {
-        skainet(createTrainCtx()) {
-            // Create tensors using DSL
-            val a = tensor<FP32, Float> {
+        skainet(createTrainingContext()) {
+            // Create tensors using DSL with KotlinDL type alias
+            val a = tensor<FloatType, Float> {
                 shape(2, 3) {
                     from(1f, 2f, 3f, 4f, 5f, 6f)
                 }
             }
 
-            val b = tensor<FP32, Float> {
+            val b = tensor<FloatType, Float> {
                 shape(2, 3) {
                     ones()
                 }
