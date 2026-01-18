@@ -4,7 +4,7 @@
 [![Slack channel](https://img.shields.io/badge/chat-slack-green.svg?logo=slack)](https://kotlinlang.slack.com/messages/kotlindl/)
 
 KotlinDL is a high-level Deep Learning API written in Kotlin and inspired by [Keras](https://keras.io).
-Under the hood, it uses [SKaiNET](https://github.com/tribit-ai/skainet) as its tensor computation backend.
+Under the hood, it uses [SKaiNET](https://github.com/SKaiNET-developers/SKaiNET) as its tensor computation backend.
 KotlinDL offers simple APIs for training deep learning models from scratch and leveraging transfer learning for tailoring existing pre-trained models to your tasks.
 
 This project aims to make Deep Learning easier for JVM and Android developers and simplify deploying deep learning models in production environments.
