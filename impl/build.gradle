@@ -1,24 +1,27 @@
 project.setDescription("This module contains the Kotlin API implemetantion code for building, training, and evaluating the Deep Learning models.")
 
-apply plugin: 'kotlin-multiplatform'
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
 apply plugin: 'com.android.library'
 
 kotlin {
+    jvmToolchain(21)
+
     jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = '1.8'
-        }
         testRuns["test"].executionTask.configure {
             useJUnitPlatform()
         }
     }
-    android {
+    androidTarget {
         publishLibraryVariants("release")
     }
     sourceSets {
         commonMain {
             dependencies {
                 api project(':api')
+                // SKaiNET core dependencies
+                api 'sk.ainet.core:skainet-lang-core:0.7.1'
+                api 'sk.ainet.core:skainet-backend-cpu:0.7.1'
+                api 'sk.ainet.core:skainet-compile-dag:0.7.1'
             }
         }
         jvmMain {
@@ -47,14 +50,14 @@ kotlin {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdk 34
     namespace = 'org.jetbrains.kotlinx.dl.impl'
     defaultConfig {
-        minSdkVersion 24
-        targetSdkVersion 31
+        minSdk 26
+        targetSdk 34
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 }

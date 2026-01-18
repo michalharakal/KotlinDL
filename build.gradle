@@ -1,18 +1,20 @@
 plugins {
-    id 'org.jetbrains.kotlin.multiplatform' version '1.8.21' apply false
+    id 'org.jetbrains.kotlin.multiplatform' version '2.1.0' apply false
+    id 'org.jetbrains.kotlin.jvm' version '2.1.0' apply false
     id 'com.android.application' apply false
     id 'maven-publish'
     id 'io.github.gradle-nexus.publish-plugin' version '1.1.0'
     id "com.gradle.plugin-publish" version "1.0.0" apply false
-    id 'org.jetbrains.dokka' version '1.5.30'
+    id 'org.jetbrains.dokka' version '1.9.20'
 }
 
 def kotlinDLVersion = "$majorVersion.$minorVersion"
 
 allprojects {
     repositories {
-        google()
         mavenCentral()
+        google()
+        mavenLocal()  // SKaiNET from local Maven
     }
 
     group = 'org.jetbrains.kotlinx'

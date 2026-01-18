@@ -1,4 +1,8 @@
-apply plugin: 'kotlin'
+apply plugin: 'org.jetbrains.kotlin.jvm'
+
+kotlin {
+    jvmToolchain(21)
+}
 
 dependencies {
     api project(":api")
@@ -36,14 +40,6 @@ if (publishedArtifactsVersion != null && !publishedArtifactsVersion.isBlank()) {
             substitute project(":onnx") using module("org.jetbrains.kotlinx:kotlin-deeplearning-onnx:$publishedArtifactsVersion") because "testing published artifacts"
         }
     }
-}
-
-compileKotlin {
-    kotlinOptions.jvmTarget = "1.8"
-}
-
-compileTestKotlin {
-    kotlinOptions.jvmTarget = "1.8"
 }
 
 test {

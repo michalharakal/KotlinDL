@@ -1,15 +1,13 @@
 project.setDescription("This module contains the Kotlin API for visualization of the Deep Learning models built with the KotlinDL.")
 
-apply plugin: 'kotlin-multiplatform'
+apply plugin: 'org.jetbrains.kotlin.multiplatform'
 apply plugin: 'com.android.library'
 
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = '1.8'
-        }
-    }
-    android {
+    jvmToolchain(21)
+
+    jvm()
+    androidTarget {
         publishLibraryVariants("release")
     }
     sourceSets {
@@ -35,14 +33,14 @@ kotlin {
 }
 
 android {
-    compileSdkVersion 31
+    compileSdk 34
     namespace = 'org.jetbrains.kotlinx.dl.visualization'
     defaultConfig {
-        minSdkVersion 24
-        targetSdkVersion 31
+        minSdk 26
+        targetSdk 34
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
 }

@@ -1,4 +1,4 @@
-apply plugin: 'kotlin'
+apply plugin: 'org.jetbrains.kotlin.jvm'
 
 dependencies {
     api project(":api")
@@ -10,7 +10,7 @@ dependencies {
 }
 
 task fatJar(type: Jar) {
-    classifier 'all'
+    archiveClassifier = 'all'
     manifest {
         attributes 'Implementation-Version': '1.15'
     }
