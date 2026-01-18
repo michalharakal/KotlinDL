@@ -2,33 +2,33 @@
  * Copyright 2020-2022 JetBrains s.r.o. and Kotlin Deep Learning project contributors. All Rights Reserved.
  * Use of this source code is governed by the Apache 2.0 license that can be found in the LICENSE.txt file.
  */
-apply plugin: 'org.jetbrains.dokka'
 
-def documentedSubprojects = ["api", "impl", "dataset", "tensorflow", "onnx", "visualization", "examples"]
+def documentedSubprojects = ['api', 'impl', 'dataset']
+
 subprojects {
     if (!(name in documentedSubprojects)) return
-    apply plugin: 'org.jetbrains.dokka'
-    tasks.named('dokkaHtml') {
-        outputDirectory = file("build/dokka")
-        dokkaSourceSets {
-            configureEach {
-                includes.from(rootProject.file('dokka/moduledoc.md').path)
 
+    apply plugin: 'org.jetbrains.dokka'
+
+    afterEvaluate {
+        tasks.matching { it.name == 'dokkaHtml' }.configureEach {
+            outputDirectory.set(file("build/dokka"))
+            dokkaSourceSets.configureEach {
+                includes.from(rootProject.file("dokka/moduledoc.md").path)
                 perPackageOption {
-                    prefix.set("kotlinx.dl")
-                    //reportUndocumented.set(true)
-                    //skipDeprecated.set(true)
+                    matchingRegex.set("kotlinx.dl.*")
                 }
             }
         }
     }
 }
 
-
-tasks.named('dokkaHtmlMultiModule') {
-    def configuredVersion = "0.4"
-    def olderVersionsDir = "older_versions"
-    pluginsMapConfiguration.set(["org.jetbrains.dokka.versioning.VersioningPlugin": """{ "version": "$configuredVersion", "olderVersionsDir":"$olderVersionsDir"}"""])
+afterEvaluate {
+    tasks.matching { it.name == 'dokkaHtmlMultiModule' }.configureEach {
+        def configuredVersion = "0.4"
+        def olderVersionsDir = "older_versions"
+        pluginsMapConfiguration.set(
+            ["org.jetbrains.dokka.versioning.VersioningPlugin": """{ "version": "${configuredVersion}", "olderVersionsDir":"${olderVersionsDir}"}"""]
+        )
+    }
 }
-
-

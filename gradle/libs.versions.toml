@@ -1,0 +1,70 @@
+[versions]
+kotlin = "2.1.0"
+jvmTarget = "21"
+
+# Android
+androidGradlePlugin = "8.2.0"
+androidCompileSdk = "34"
+androidMinSdk = "26"
+androidTargetSdk = "34"
+
+# Gradle Plugins
+dokka = "1.9.20"
+nexusPublish = "1.1.0"
+gradlePluginPublish = "1.0.0"
+downloadPlugin = "4.1.2"
+
+# SKaiNET
+skainet = "0.8.0-SNAPSHOT"
+
+# Libraries
+kotlinCsv = "0.7.3"
+kotlinLogging = "2.1.21"
+jhdf = "0.5.7"
+klaxon = "5.5"
+imageioJpeg = "3.8.2"
+junit = "5.8.2"
+androidxCamera = "1.0.0-rc03"
+
+[libraries]
+# SKaiNET
+skainet-lang-core = { module = "sk.ainet.core:skainet-lang-core", version.ref = "skainet" }
+skainet-backend-cpu = { module = "sk.ainet.core:skainet-backend-cpu", version.ref = "skainet" }
+skainet-compile-dag = { module = "sk.ainet.core:skainet-compile-dag", version.ref = "skainet" }
+skainet-lang-core-jvm = { module = "sk.ainet.core:skainet-lang-core-jvm", version.ref = "skainet" }
+skainet-backend-cpu-jvm = { module = "sk.ainet.core:skainet-backend-cpu-jvm", version.ref = "skainet" }
+skainet-compile-dag-jvm = { module = "sk.ainet.core:skainet-compile-dag-jvm", version.ref = "skainet" }
+
+# JVM Libraries
+kotlin-csv = { module = "com.github.doyaaaaaken:kotlin-csv-jvm", version.ref = "kotlinCsv" }
+kotlin-logging = { module = "io.github.microutils:kotlin-logging", version.ref = "kotlinLogging" }
+jhdf = { module = "io.jhdf:jhdf", version.ref = "jhdf" }
+klaxon = { module = "com.beust:klaxon", version.ref = "klaxon" }
+imageio-jpeg = { module = "com.twelvemonkeys.imageio:imageio-jpeg", version.ref = "imageioJpeg" }
+
+# Testing
+junit-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit" }
+junit-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit" }
+junit-params = { module = "org.junit.jupiter:junit-jupiter-params", version.ref = "junit" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+
+# Android
+androidx-camera-core = { module = "androidx.camera:camera-core", version.ref = "androidxCamera" }
+
+# Gradle Plugin Dependencies
+android-gradle-plugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
+download-gradle-plugin = { module = "de.undercouch.download:de.undercouch.download.gradle.plugin", version.ref = "downloadPlugin" }
+
+[bundles]
+skainet-common = ["skainet-lang-core", "skainet-backend-cpu", "skainet-compile-dag"]
+skainet-jvm = ["skainet-lang-core-jvm", "skainet-backend-cpu-jvm", "skainet-compile-dag-jvm"]
+junit = ["junit-api", "junit-engine", "junit-params"]
+
+[plugins]
+kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexusPublish" }
+gradle-plugin-publish = { id = "com.gradle.plugin-publish", version.ref = "gradlePluginPublish" }

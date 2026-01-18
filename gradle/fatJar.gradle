@@ -1,24 +1,24 @@
-apply plugin: 'org.jetbrains.kotlin.jvm'
+// Fat JAR task for creating an all-in-one JAR
+// This script is applied to the root project
 
-dependencies {
-    api project(":api")
-    api project(":impl")
-    api project(":dataset")
-    api project(":tensorflow")
-    api project(":onnx")
-    api project(":visualization")
-}
-
-task fatJar(type: Jar) {
-    archiveClassifier = 'all'
+tasks.register('fatJar', Jar) {
+    archiveClassifier.set('all')
     manifest {
-        attributes 'Implementation-Version': '1.15'
+        attributes['Implementation-Version'] = '1.15'
     }
-    from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
-    with jar
-    duplicatesStrategy = DuplicatesStrategy.INCLUDE
-}
 
-artifacts {
-    archives fatJar
+    // Collect all runtime dependencies from the main modules
+    def apiProject = project(':api')
+    def implProject = project(':impl')
+    def datasetProject = project(':dataset')
+
+    dependsOn apiProject.tasks.named('jar')
+    dependsOn implProject.tasks.named('jar')
+    dependsOn datasetProject.tasks.named('jar')
+
+    from(apiProject.tasks.named('jar').map { zipTree(it.archiveFile.get().asFile) })
+    from(implProject.tasks.named('jar').map { zipTree(it.archiveFile.get().asFile) })
+    from(datasetProject.tasks.named('jar').map { zipTree(it.archiveFile.get().asFile) })
+
+    duplicatesStrategy = DuplicatesStrategy.INCLUDE
 }
