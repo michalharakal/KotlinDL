@@ -1,6 +1,10 @@
 [versions]
-kotlin = "2.1.0"
+kotlin = "2.2.21"
 jvmTarget = "21"
+
+kover = "0.9.4"
+binaryCompatibilityValidator = "0.18.1"
+shadow = "9.3.1"
 
 # Android
 androidGradlePlugin = "8.2.0"
@@ -15,7 +19,7 @@ gradlePluginPublish = "1.0.0"
 downloadPlugin = "4.1.2"
 
 # SKaiNET
-skainet = "0.8.0-SNAPSHOT"
+skainet = "0.8.3"
 
 # Libraries
 kotlinCsv = "0.7.3"
@@ -65,6 +69,8 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
-nexus-publish = { id = "io.github.gradle-nexus.publish-plugin", version.ref = "nexusPublish" }
-gradle-plugin-publish = { id = "com.gradle.plugin-publish", version.ref = "gradlePluginPublish" }
+jetbrains-dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+shadow-jar = { id = "com.gradleup.shadow", version.ref = "shadow" }
+vanniktech-mavenPublish = { id = "com.vanniktech.maven.publish", version = "0.35.0" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
+binary-compatibility-validator = { id = "org.jetbrains.kotlinx.binary-compatibility-validator", version.ref = "binaryCompatibilityValidator" }
