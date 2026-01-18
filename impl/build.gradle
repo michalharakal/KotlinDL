@@ -19,9 +19,9 @@ kotlin {
             dependencies {
                 api project(':api')
                 // SKaiNET core dependencies
-                api 'sk.ainet.core:skainet-lang-core:0.7.1'
-                api 'sk.ainet.core:skainet-backend-cpu:0.7.1'
-                api 'sk.ainet.core:skainet-compile-dag:0.7.1'
+                api 'sk.ainet.core:skainet-lang-core:0.8.0-SNAPSHOT'
+                api 'sk.ainet.core:skainet-backend-cpu:0.8.0-SNAPSHOT'
+                api 'sk.ainet.core:skainet-compile-dag:0.8.0-SNAPSHOT'
             }
         }
         jvmMain {
@@ -38,6 +38,11 @@ kotlin {
                 implementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
                 implementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
                 implementation 'org.junit.jupiter:junit-jupiter-params:5.8.2'
+                implementation 'org.jetbrains.kotlin:kotlin-test:2.1.0'
+                // SKaiNET JVM-specific for tests
+                implementation 'sk.ainet.core:skainet-lang-core-jvm:0.8.0-SNAPSHOT'
+                implementation 'sk.ainet.core:skainet-backend-cpu-jvm:0.8.0-SNAPSHOT'
+                implementation 'sk.ainet.core:skainet-compile-dag-jvm:0.8.0-SNAPSHOT'
             }
         }
         androidMain {
