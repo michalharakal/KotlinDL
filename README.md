@@ -4,10 +4,20 @@
 [![Slack channel](https://img.shields.io/badge/chat-slack-green.svg?logo=slack)](https://kotlinlang.slack.com/messages/kotlindl/)
 
 KotlinDL is a high-level Deep Learning API written in Kotlin and inspired by [Keras](https://keras.io).
-Under the hood, it uses [SKaiNET](https://github.com/SKaiNET-developers/SKaiNET) as its tensor computation backend.
+Under the hood, it uses [SKaiNET](https://github.com/SKaiNET-developers/SKaiNET) as its tensor computation backend, enabling **Kotlin Multiplatform** support across all SKaiNET-supported platforms.
+
 KotlinDL offers simple APIs for training deep learning models from scratch and leveraging transfer learning for tailoring existing pre-trained models to your tasks.
 
-This project aims to make Deep Learning easier for JVM and Android developers and simplify deploying deep learning models in production environments.
+### Kotlin Multiplatform Support
+
+By leveraging SKaiNET, KotlinDL runs on all platforms supported by SKaiNET:
+- **JVM** (Linux, macOS, Windows)
+- **Android**
+- **Native** (Linux x64/ARM64, macOS ARM64, iOS ARM64/Simulator)
+- **JavaScript** (Browser, Node.js)
+- **WebAssembly** (Browser, Node.js)
+
+Write your deep learning code once and deploy it anywhere.
 
 Here's an example of training a simple neural network:
 
@@ -61,7 +71,8 @@ fun main() {
 
 - [Library Structure](#library-structure)
 - [How to configure KotlinDL in your project](#how-to-configure-kotlindl-in-your-project)
-  - [Working with KotlinDL in Android projects](#working-with-kotlindl-in-android-projects)
+  - [Kotlin Multiplatform projects](#kotlin-multiplatform-projects)
+  - [Android projects](#android-projects)
 - [Requirements](#requirements)
 - [Documentation](#documentation)
 - [Examples and tutorials](#examples-and-tutorials)
@@ -78,7 +89,7 @@ KotlinDL consists of several modules:
 * `kotlin-deeplearning-impl` - Implementation classes, utilities, and SKaiNET integration
 * `kotlin-deeplearning-dataset` - Dataset classes and data loading utilities
 
-All modules support both desktop JVM and Android platforms.
+All modules are built with Kotlin Multiplatform and support all SKaiNET-compatible platforms (JVM, Android, Native, JS/Wasm).
 
 ## How to configure KotlinDL in your project
 
@@ -126,7 +137,41 @@ dependencies {
 
 The latest KotlinDL version is `0.6.0`.
 
-### Working with KotlinDL in Android projects
+### Kotlin Multiplatform projects
+
+KotlinDL is built with Kotlin Multiplatform, allowing you to share deep learning code across all supported platforms. In your `build.gradle.kts`:
+
+```kotlin
+kotlin {
+    // JVM & Android
+    jvm()
+    androidTarget()
+
+    // Native - Desktop
+    linuxX64()
+    linuxArm64()
+    macosArm64()
+
+    // Native - iOS
+    iosArm64()
+    iosSimulatorArm64()
+
+    // JavaScript & WebAssembly
+    js(IR) { browser(); nodejs() }
+    wasmJs { browser(); nodejs() }
+
+    sourceSets {
+        commonMain.dependencies {
+            implementation("org.jetbrains.kotlinx:kotlin-deeplearning-impl:[KOTLIN-DL-VERSION]")
+            implementation("org.jetbrains.kotlinx:kotlin-deeplearning-dataset:[KOTLIN-DL-VERSION]")
+        }
+    }
+}
+```
+
+SKaiNET provides the platform-specific tensor computation implementations automatically, so your deep learning code in `commonMain` works across all targets without modification.
+
+### Android projects
 
 KotlinDL supports Android development with SKaiNET as the tensor computation backend.
 

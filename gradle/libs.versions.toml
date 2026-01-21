@@ -31,13 +31,30 @@ junit = "5.8.2"
 androidxCamera = "1.0.0-rc03"
 
 [libraries]
-# SKaiNET
+# SKaiNET - Common (Multiplatform)
 skainet-lang-core = { module = "sk.ainet.core:skainet-lang-core", version.ref = "skainet" }
 skainet-backend-cpu = { module = "sk.ainet.core:skainet-backend-cpu", version.ref = "skainet" }
 skainet-compile-dag = { module = "sk.ainet.core:skainet-compile-dag", version.ref = "skainet" }
+
+# SKaiNET - JVM specific
 skainet-lang-core-jvm = { module = "sk.ainet.core:skainet-lang-core-jvm", version.ref = "skainet" }
 skainet-backend-cpu-jvm = { module = "sk.ainet.core:skainet-backend-cpu-jvm", version.ref = "skainet" }
 skainet-compile-dag-jvm = { module = "sk.ainet.core:skainet-compile-dag-jvm", version.ref = "skainet" }
+
+# SKaiNET - Native specific
+skainet-lang-core-native = { module = "sk.ainet.core:skainet-lang-core-native", version.ref = "skainet" }
+skainet-backend-cpu-native = { module = "sk.ainet.core:skainet-backend-cpu-native", version.ref = "skainet" }
+skainet-compile-dag-native = { module = "sk.ainet.core:skainet-compile-dag-native", version.ref = "skainet" }
+
+# SKaiNET - JS specific
+skainet-lang-core-js = { module = "sk.ainet.core:skainet-lang-core-js", version.ref = "skainet" }
+skainet-backend-cpu-js = { module = "sk.ainet.core:skainet-backend-cpu-js", version.ref = "skainet" }
+skainet-compile-dag-js = { module = "sk.ainet.core:skainet-compile-dag-js", version.ref = "skainet" }
+
+# SKaiNET - Wasm specific
+skainet-lang-core-wasm = { module = "sk.ainet.core:skainet-lang-core-wasm-js", version.ref = "skainet" }
+skainet-backend-cpu-wasm = { module = "sk.ainet.core:skainet-backend-cpu-wasm-js", version.ref = "skainet" }
+skainet-compile-dag-wasm = { module = "sk.ainet.core:skainet-compile-dag-wasm-js", version.ref = "skainet" }
 
 # JVM Libraries
 kotlin-csv = { module = "com.github.doyaaaaaken:kotlin-csv-jvm", version.ref = "kotlinCsv" }
@@ -62,6 +79,9 @@ download-gradle-plugin = { module = "de.undercouch.download:de.undercouch.downlo
 [bundles]
 skainet-common = ["skainet-lang-core", "skainet-backend-cpu", "skainet-compile-dag"]
 skainet-jvm = ["skainet-lang-core-jvm", "skainet-backend-cpu-jvm", "skainet-compile-dag-jvm"]
+skainet-native = ["skainet-lang-core-native", "skainet-backend-cpu-native", "skainet-compile-dag-native"]
+skainet-js = ["skainet-lang-core-js", "skainet-backend-cpu-js", "skainet-compile-dag-js"]
+skainet-wasm = ["skainet-lang-core-wasm", "skainet-backend-cpu-wasm", "skainet-compile-dag-wasm"]
 junit = ["junit-api", "junit-engine", "junit-params"]
 
 [plugins]
