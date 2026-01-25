@@ -207,7 +207,7 @@ dependencies {
 
 * [Change log for KotlinDL](CHANGELOG.md)
 * [Full KotlinDL API reference](https://kotlin.github.io/kotlindl/)
-* [SKaiNET Documentation](https://github.com/tribit-ai/skainet)
+* [SKaiNET Project repository](https://github.com/SKaiNET-developers/SKaiNET)
 
 ## Examples and tutorials
 
